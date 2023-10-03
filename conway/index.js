@@ -8,21 +8,6 @@ let state = {};
 let timerId = null;
 let running = false;
 
-function drawGrid(ctx, options = {
-    cellSize: CELL_SIZE,
-    lineColor: LINE_COLOR,
-}) {
-    const canvasHeight = ctx.canvas.height;
-    const canvasWidth = ctx.canvas.width;
-    ctx.strokeStyle = options.lineColor;
-    for (let y = 0; y <= canvasHeight; y += options.cellSize) {
-        for (let x = 0; x <= canvasWidth; x += options.cellSize) {
-            ctx.strokeRect(x, y, options.cellSize, options.cellSize);
-        }
-    }
-    ctx.save();
-}
-
 function resetGameState() {
     const btn = document.getElementById('startstop');
     state = {};
@@ -46,10 +31,28 @@ function toggleStart() {
     }
 }
 
-function draw() {
-    const canvas = document.getElementById('game');
-    const ctx = canvas.getContext('2d');
-    drawGrid(ctx);
+function toggleCellState(coordinates) {
+    const cellState = state[key(coordinates)];
+    if (!cellState) {
+        state[key(coordinates)] = true;
+    } else {
+        state[key(coordinates)] = false;
+    }
+}
+
+function drawGrid(ctx, options = {
+    cellSize: CELL_SIZE,
+    lineColor: LINE_COLOR,
+}) {
+    const canvasHeight = ctx.canvas.height;
+    const canvasWidth = ctx.canvas.width;
+    ctx.strokeStyle = options.lineColor;
+    for (let y = 0; y <= canvasHeight; y += options.cellSize) {
+        for (let x = 0; x <= canvasWidth; x += options.cellSize) {
+            ctx.strokeRect(x, y, options.cellSize, options.cellSize);
+        }
+    }
+    ctx.save();
 }
 
 function getMouseCoordinate(e) {
@@ -157,16 +160,20 @@ function draw() {
 
 function init() {
     const canvas = document.getElementById('game');
+    const speedSlider = document.getElementById('speed');
 
     canvas.addEventListener('mousedown', (e) => {
         const coordinates = getMouseCoordinate(e);
-        const cellState = state[key(coordinates)];
-        if (!cellState) {
-            state[key(coordinates)] = true;
+        toggleCellState(coordinates);
+    });
+
+    canvas.addEventListener('mouseover', (e) => {
+        if (running) {
+            canvas.style.cursor = "move";
         } else {
-            state[key(coordinates)] = false;
+            canvas.style.cursor = "pointer";
         }
-    })
+    });
 
     window.requestAnimationFrame(draw);
 }

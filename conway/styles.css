@@ -16,3 +16,18 @@ h1 {
 canvas {
     border: 2px solid black
 }
+
+.game-container {
+    position: relative;
+    display: inline-block;
+}
+
+.actions-container {
+    border: 2px solid grey;
+    position: absolute;
+    background-color: white;
+    bottom: 0;
+    right: 0;
+    padding: 0.5rem 1rem;
+    margin: 1rem 1rem; 
+}

@@ -7,12 +7,16 @@
     <title>Conway's Game of Life</title>
 </head>
 <body>
-    <main>
+    <header>
         <h1>Conway's Game of Life</h1>
-        <canvas id="game" width="600" height="555"></canvas>
-        <div>
-            <button onclick="resetGameState()" id="clear">Clear</button>
-            <button onclick="toggleStart()" id="startstop">Start</button>
+    </header>
+    <main>
+        <div class="game-container">
+            <canvas id="game" width="600" height="555"></canvas>
+            <div class="actions-container">
+                <button onclick="resetGameState()" id="clear">Clear</button>
+                <button onclick="toggleStart()" id="startstop">Start</button>
+            </div>
         </div>
     </main>
     <script src="index.js"></script>
