@@ -141,6 +141,14 @@ function createNextFrame(currentState) {
     return nextState;
 }
 
+function onResize() {
+    if (window.innerWidth >= GRID_MAX_WIDTH) {
+        canvas.width = GRID_MAX_WIDTH;
+    } else {
+        canvas.width = window.innerWidth - 24;
+    } 
+}
+
 function draw() {
     const ctx = document.getElementById('game').getContext('2d');
     
@@ -162,17 +170,9 @@ function draw() {
 function init() {
     const canvas = document.getElementById('game');
 
-    window.addEventListener('resize', () => {
-        console.log(canvas.width, window.innerWidth);
+    window.addEventListener('resize', onResize);
+    onResize();
     
-        if (window.innerWidth >= GRID_MAX_WIDTH) {
-            canvas.width = GRID_MAX_WIDTH;
-        } else {
-            canvas.width = window.innerWidth - 24;
-        } 
-    });
-
-
     canvas.addEventListener('mouseup', (e) => {
         if (!running) {
             const coordinates = getMouseCoordinate(e);
