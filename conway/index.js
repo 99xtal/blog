@@ -24,6 +24,7 @@ function drawGrid(ctx, options = {
 }
 
 function resetGameState() {
+    const btn = document.getElementById('startstop');
     state = {};
     if (timerId) {
         clearInterval(timerId);
