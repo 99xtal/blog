@@ -1,0 +1,18 @@
+body {
+    font-family:'Courier New', Courier, monospace;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    text-align: center;
+}
+
+canvas {
+    border: 2px solid black
+}
