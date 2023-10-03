@@ -1,28 +1,29 @@
 'use strict';
 
+const GRID_MAX_WIDTH = 600;
 const CELL_COLOR = 'black';
 const CELL_SIZE = 15;
 const LINE_COLOR = 'gray';
 
-let state = {};
+let cellMap = {};
 let timerId = null;
 let running = false;
 
 function resetGameState() {
     const btn = document.getElementById('startstop');
-    state = {};
+    cellMap = {};
     if (timerId) {
         clearInterval(timerId);
         btn.innerHTML = "Start"
     }
 }
 
-function toggleStart() {
+function toggleStartStop() {
     running = !running;
     const btn = document.getElementById('startstop');
     if (running) {
         timerId = setInterval(() => {
-            state = createNextFrame(state);
+            cellMap = createNextFrame(cellMap);
         }, 60);
         btn.innerHTML = "Stop"
     } else if (timerId) {
@@ -32,11 +33,11 @@ function toggleStart() {
 }
 
 function toggleCellState(coordinates) {
-    const cellState = state[key(coordinates)];
+    const cellState = cellMap[key(coordinates)];
     if (!cellState) {
-        state[key(coordinates)] = true;
+        cellMap[key(coordinates)] = true;
     } else {
-        state[key(coordinates)] = false;
+        cellMap[key(coordinates)] = false;
     }
 }
 
@@ -146,7 +147,7 @@ function draw() {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     drawGrid(ctx);
 
-    for (const [key, alive] of Object.entries(state)) {
+    for (const [key, alive] of Object.entries(cellMap)) {
         const coordinate = coordinateFromKey(key);
         if (alive) {
             fillCell(ctx, coordinate);
@@ -160,11 +161,23 @@ function draw() {
 
 function init() {
     const canvas = document.getElementById('game');
-    const speedSlider = document.getElementById('speed');
 
-    canvas.addEventListener('mousedown', (e) => {
-        const coordinates = getMouseCoordinate(e);
-        toggleCellState(coordinates);
+    window.addEventListener('resize', () => {
+        console.log(canvas.width, window.innerWidth);
+    
+        if (window.innerWidth >= GRID_MAX_WIDTH) {
+            canvas.width = GRID_MAX_WIDTH;
+        } else {
+            canvas.width = window.innerWidth - 24;
+        } 
+    });
+
+
+    canvas.addEventListener('mouseup', (e) => {
+        if (!running) {
+            const coordinates = getMouseCoordinate(e);
+            toggleCellState(coordinates);
+        }
     });
 
     canvas.addEventListener('mouseover', (e) => {
