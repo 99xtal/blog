@@ -142,6 +142,8 @@ function createNextFrame(currentState) {
 }
 
 function onResize() {
+    const canvas = document.getElementById('game');
+
     if (window.innerWidth >= GRID_MAX_WIDTH) {
         canvas.width = GRID_MAX_WIDTH;
     } else {
