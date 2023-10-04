@@ -5,6 +5,7 @@ const CELL_COLOR = 'black';
 const CELL_SIZE = 15;
 const LINE_COLOR = 'gray';
 
+let turnsPerSecond = 5;
 let cellMap = {};
 let timerId = null;
 let running = false;
@@ -24,7 +25,7 @@ function toggleStartStop() {
     if (running) {
         timerId = setInterval(() => {
             cellMap = createNextFrame(cellMap);
-        }, 60);
+        }, 1000 / turnsPerSecond);
         btn.innerHTML = "Stop"
     } else if (timerId) {
         clearInterval(timerId);
@@ -171,6 +172,7 @@ function draw() {
 
 function init() {
     const canvas = document.getElementById('game');
+    const tpsInput = document.getElementById('tps-input');
 
     window.addEventListener('resize', onResize);
     onResize();
@@ -189,6 +191,19 @@ function init() {
             canvas.style.cursor = "pointer";
         }
     });
+
+    tpsInput.addEventListener('change', (e) => {
+        turnsPerSecond = e.target.value;
+    })
+
+    tpsInput.addEventListener('blur', () => {
+        if (timerId) {
+            clearInterval(timerId);
+            timerId = setInterval(() => {
+                cellMap = createNextFrame(cellMap);
+            }, 1000 / turnsPerSecond);
+        }
+    })
 
     window.requestAnimationFrame(draw);
 }
