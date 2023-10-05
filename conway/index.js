@@ -1,6 +1,7 @@
 'use strict';
 
 const GRID_MAX_WIDTH = 600;
+const GRID_MAX_HEIGHT = 555;
 const CELL_COLOR = 'black';
 const CELL_SIZE = 15;
 const LINE_COLOR = 'gray';
@@ -144,12 +145,19 @@ function createNextFrame(currentState) {
 
 function onResize() {
     const canvas = document.getElementById('game');
+    const header = document.querySelector('header')
 
-    if (window.innerWidth >= GRID_MAX_WIDTH) {
-        canvas.width = GRID_MAX_WIDTH;
+    if (window.innerWidth < GRID_MAX_WIDTH) {
+        canvas.width = window.innerWidth - 32;
     } else {
-        canvas.width = window.innerWidth - 24;
-    } 
+        canvas.width = GRID_MAX_WIDTH
+    }
+
+    if (window.innerHeight < GRID_MAX_HEIGHT + header.offsetHeight + 32) {
+        canvas.height = window.innerHeight - header.offsetHeight - 64;
+    } else {
+        canvas.height = GRID_MAX_HEIGHT;
+    }
 }
 
 function draw() {
