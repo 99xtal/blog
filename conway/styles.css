@@ -40,3 +40,18 @@ canvas {
     display: flex;
     justify-content: space-evenly;
 }
+
+.flex-centered {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+}
+
+.link-container {
+    padding-bottom: 0.5rem;
+}
+
+dialog {
+    max-width: 600px;
+}

@@ -188,11 +188,28 @@ function draw() {
 }
 
 function init() {
+    const rulesBtn = document.getElementById('rules-btn');
+    const closeBtn = document.getElementById('close-rules');
     const canvas = document.getElementById('game');
     const tpsInput = document.getElementById('tps-input');
+    const rulesDialog = document.getElementById('rules-popup');
 
     window.addEventListener('resize', onResize);
     onResize();
+
+    rulesBtn.addEventListener('click', () => {
+        rulesDialog.showModal();
+    });
+
+    rulesDialog.addEventListener('click', (e) => {
+        if (e.target === rulesDialog) {
+            rulesDialog.close();
+        }
+    })
+
+    closeBtn.addEventListener('click', () => {
+        rulesDialog.close();
+    })
 
     canvas.addEventListener('mousedown', (e) => {
         isClicking = true;
@@ -231,7 +248,7 @@ function init() {
         if (running) {
             return;
         }
-        
+
         const coordinates = getTapCoordinate(e);
         if (!lastToggledCell || key(coordinates) !== lastToggledCell) {
             cellMap[key(coordinates)] = true;
