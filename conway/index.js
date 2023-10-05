@@ -153,7 +153,7 @@ function onResize() {
         canvas.width = GRID_MAX_WIDTH
     }
 
-    if (window.innerHeight < GRID_MAX_HEIGHT + header.offsetHeight + 32) {
+    if (window.innerHeight < GRID_MAX_HEIGHT + header.offsetHeight + 64) {
         canvas.height = window.innerHeight - header.offsetHeight - 64;
     } else {
         canvas.height = GRID_MAX_HEIGHT;
