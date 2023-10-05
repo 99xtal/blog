@@ -6,10 +6,12 @@ const CELL_COLOR = 'black';
 const CELL_SIZE = 15;
 const LINE_COLOR = 'gray';
 
-let turnsPerSecond = 5;
+let turnsPerSecond = 15;
 let cellMap = {};
 let timerId = null;
 let running = false;
+let isClicking = false;
+let lastToggledCell = null;
 
 function resetGameState() {
     const btn = document.getElementById('startstop');
@@ -56,6 +58,13 @@ function drawGrid(ctx, options = {
         }
     }
     ctx.save();
+}
+
+function getTapCoordinate(e) {
+    const bcr = e.target.getBoundingClientRect();
+    const x = Math.floor((e.touches[0].clientX - bcr.x) / CELL_SIZE);
+    const y = Math.floor((e.touches[0].clientY - bcr.y) / CELL_SIZE);
+    return [x, y]; 
 }
 
 function getMouseCoordinate(e) {
@@ -184,13 +193,30 @@ function init() {
 
     window.addEventListener('resize', onResize);
     onResize();
+
+    canvas.addEventListener('mousedown', (e) => {
+        isClicking = true;
+    })
     
     canvas.addEventListener('mouseup', (e) => {
         if (!running) {
             const coordinates = getMouseCoordinate(e);
             toggleCellState(coordinates);
         }
+        isClicking = false;
     });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (isClicking && !running) {
+            const coordinates = getMouseCoordinate(e);
+
+            if (!lastToggledCell || key(coordinates) !== lastToggledCell) {
+                cellMap[key(coordinates)] = true;
+                lastToggledCell = key(coordinates);
+            }
+        }
+
+    })
 
     canvas.addEventListener('mouseover', (e) => {
         if (running) {
@@ -199,6 +225,19 @@ function init() {
             canvas.style.cursor = "pointer";
         }
     });
+
+    canvas.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (running) {
+            return;
+        }
+        
+        const coordinates = getTapCoordinate(e);
+        if (!lastToggledCell || key(coordinates) !== lastToggledCell) {
+            cellMap[key(coordinates)] = true;
+            lastToggledCell = key(coordinates);
+        }
+    })
 
     tpsInput.addEventListener('change', (e) => {
         turnsPerSecond = e.target.value;
